@@ -2,4 +2,7 @@
 
 Pull requests with suggestions and improvements, however small or big, are welcome!
 
-The PDFs are not updated automatically. You can either commit yoru PDF, or wait till I rebuild it and commit it, to see your changes. 
+The PDFs are not updated automatically. You can either commit your PDF, or wait till it is rebuilt and re-committed, to see your changes. 
+
+
+The changes in lecture slides are going through an automated check.
