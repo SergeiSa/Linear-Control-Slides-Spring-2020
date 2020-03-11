@@ -238,7 +238,7 @@ This is the Algebraic Riccati equation.
 
 There are a number of ways to solve LQR:
 \begin{itemize}
-    \item In MATLAB there is a function \texttt{[K,S] = lqr(A, B, Q, R)}
+    \item In MATLAB there is a function \texttt{[K,S,P] = lqr(A, B, Q, R), where P=eig(A-B*K)}
     \item In Python, there is \texttt{S = scipy.linalg.solve\_continuous\_are(a, b, q, r)}
     \item In Drake (by MIT and Toyota Research) there is a function \texttt{(K,S) = LinearQuadraticRegulator(A,B,Q,R)}
 \end{itemize}
