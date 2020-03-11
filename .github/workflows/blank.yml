@@ -13,21 +13,15 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v1
+
       - name: Compile LaTeX document Discrete_Systems
         uses: xu-cheng/latex-action@master
         with:
           root_file: main.tex
           working_directory: lecture_slides/Discrete_Systems/
 
-      - name: Compile LaTeX document Discrete_Systems
+      - name: Compile LaTeX document for Optimal_Control_of_LTI_systems
         uses: xu-cheng/latex-action@master
         with:
           root_file: main.tex
           working_directory: lecture_slides/Optimal_Control_of_LTI_systems/
-
-#       - name: Save artifact
-#         uses: actions/upload-artifact@v1
-#         with:
-#           name: Discrete_Systems.pdf
-#           path: Discrete_Systems/
-
