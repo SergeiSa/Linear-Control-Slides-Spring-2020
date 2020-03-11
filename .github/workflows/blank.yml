@@ -3,6 +3,11 @@ name: Build LaTeX document
 on: 
   push:
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
     branches:
       - master
 
@@ -13,10 +18,6 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v2
-      - name: Set up git credentials
-        run: |
-          git config --global user.name 'PDF compiler'
-          git config --global user.email 'pdf-compiler@users.noreply.github.com'
 
       - name: Compile LaTeX document Discrete_Systems
         uses: xu-cheng/latex-action@master
@@ -30,9 +31,12 @@ jobs:
           root_file: main.tex
           working_directory: lecture_slides/Optimal_Control_of_LTI_systems/
 
-      - name: Push built pdfs
+      - name: Update compiled PDFs in git repository
+        if: github.event.pull_request.merged == true || (github.event_name == 'push' && github.ref == 'refs/heads/master')
         run: |
+          git config --global user.name 'CI PDF compiler'
+          git config --global user.email '<>'
           git add lecture_slides/Discrete_Systems/main.pdf
           git add lecture_slides/Optimal_Control_of_LTI_systems/main.pdf
-          git commit -m "Add auto-compiled PDFs"
+          git commit -m "Update compiled PDFs"
           git push
