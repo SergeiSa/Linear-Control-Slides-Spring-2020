@@ -1,0 +1,76 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1.5in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,hyperref}
+
+
+\begin{document}
+
+\large % please keep the text at this size for ease of reading.
+
+% ------------------------------------------ %
+%                 START HERE             %
+% ------------------------------------------ %
+
+
+\begin{center}
+{\Large Why you don't want controllers using derivatives of the same order as the equations themselves} 
+\end{center}
+\vspace{0.05in}
+
+
+\begin{flushleft}
+
+
+Assume we have dynamics:
+
+\[
+\dot x = Ax + Bu
+\]
+
+Let $u =  K_p x + K_v \dot x $. If $B$ is invertible, we can pick $K_v$ such that $K_v = B^{-1}$ and obtain:
+
+\[
+\dot x = Ax + B(K_p x + B^{-1} \dot x)
+\]
+
+\[
+\dot x = Ax + B K_p x + \dot x
+\]
+
+\[
+0 = (A + B K_p) x
+\]
+
+Which means $x$ is in the null space of $(A + B K_p)$. However, the initial problem did not specify this, therefore for any $x \not\in \text{null}(A + B K_p)$, the proposed control should lead to an instantaneous change in $x$, which is not physically possible or meaningful.
+
+\end{flushleft}
+
+\bigskip
+
+\begin{flushleft}
+
+Alternatively, pick $u =  K_p x + B^{-1} \dot x  - c$. Then we obtain:
+
+\[
+\dot x = Ax + B K_p x + \dot x - B c
+\]
+
+\[
+(A + B K_p) x = B c
+\]
+
+\[
+ x = (A + B K_p)^+ B c
+\]
+
+
+Here it means that any $x$ in column space of $\text{col}(A + B K_p)^+ B$ can be achieved instantaneously, which is not physical or meaningful.
+
+\end{flushleft}
+
+
+\end{document}
+
