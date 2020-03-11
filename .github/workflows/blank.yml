@@ -1,46 +1,26 @@
-name: Build LaTeX document
+# name: Build LaTeX document
 
-on: 
-  push:
-  pull_request:
-    branches:
-      - master
+# on: 
+#   push:
+#   pull_request:
+#     branches:
+#       - master
 
-
-jobs:
-  build_latex:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v1
-      - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@master
-        with:
-          root_file: CT Lecture - Discrete Systems/main.tex
-          working_directory: CT Lecture - Discrete Systems/
-      - name: Save artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: Discrete_Systems.pdf
-          path: src/main.pdf
-
-
-
-
-# name: CI
-
-# on: [push]
 
 # jobs:
-#   latex-job:
+#   build_latex:
 #     runs-on: ubuntu-latest
-#     name: A job to Compile Latex file
 #     steps:
-#     - uses: actions/checkout@v1
-#     - name: Compilation
-#       uses: vinay0410/tectonic-action@master
-#       env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       with:
-#         tex_path: 'dir/file.tex'
-#         push: 'yes'
+#       - name: Set up Git repository
+#         uses: actions/checkout@v1
+#       - name: Compile LaTeX document
+#         uses: xu-cheng/latex-action@master
+#         with:
+#           root_file: main.tex
+#           working_directory: Discrete_Systems/
+#       - name: Save artifact
+#         uses: actions/upload-artifact@v1
+#         with:
+#           name: Discrete_Systems.pdf
+#           path: Discrete_Systems/
+
