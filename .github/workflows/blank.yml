@@ -16,13 +16,13 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@master
         with:
-          root_file: Discrete_Systems/main.tex
+          root_file: main.tex
           working_directory: Discrete_Systems/
       - name: Save artifact
         uses: actions/upload-artifact@v1
         with:
           name: Discrete_Systems.pdf
-          path: src/main.pdf
+          path: Discrete_Systems/main.pdf
 
 
 
