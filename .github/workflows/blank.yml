@@ -16,12 +16,12 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@master
         with:
-          root_file: main.tex
-          working_directory: src/
+          root_file: CT Lecture - Discrete Systems/main.tex
+          working_directory: CT Lecture - Discrete Systems/
       - name: Save artifact
         uses: actions/upload-artifact@v1
         with:
-          name: ControlTheoryHW1.pdf
+          name: Discrete_Systems.pdf
           path: src/main.pdf
 
 
