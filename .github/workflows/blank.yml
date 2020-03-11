@@ -16,8 +16,8 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@master
         with:
-          root_file: CT Lecture - Discrete Systems/main.tex
-          working_directory: CT Lecture - Discrete Systems/
+          root_file: Discrete_Systems/main.tex
+          working_directory: Discrete_Systems/
       - name: Save artifact
         uses: actions/upload-artifact@v1
         with:
