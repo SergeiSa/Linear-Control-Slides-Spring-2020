@@ -1,51 +1,46 @@
-# This is a basic workflow to help you get started with Actions
+name: Build LaTeX document
 
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request 
-# events but only for the master branch
-on:
+on: 
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build_latex:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-#     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-#     - uses: actions/checkout@v2
-
-#     # Runs a single command using the runners shell
-#     - name: Run a one-line script
-#       run: echo Hello, world!
-
-#     - name: LaTeX compilation
-#       uses: dante-ev/latex-action@v0.2.0
-      
-      name: Build LaTeX document
-      on: [push]
-      jobs:
-        build_latex:
-          runs-on: ubuntu-latest
-          steps:
-            - name: Set up Git repository
-              uses: actions/checkout@v1
-            - name: Compile LaTeX document
-              uses: dante-ev/latex-action@master
-              with:
-                root_file: CT Lecture - Discrete Systems/main.tex
-                working_directory: CT Lecture - Discrete Systems
+      - name: Set up Git repository
+        uses: actions/checkout@v1
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: main.tex
+          working_directory: src/
+      - name: Save artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ControlTheoryHW1.pdf
+          path: src/main.pdf
 
 
-#     # Runs a set of commands using the runners shell
-#     - name: Run a multi-line script
-#       run: |
-#         echo Add other actions to build,
-#         echo test, and deploy your project.
+
+
+# name: CI
+
+# on: [push]
+
+# jobs:
+#   latex-job:
+#     runs-on: ubuntu-latest
+#     name: A job to Compile Latex file
+#     steps:
+#     - uses: actions/checkout@v1
+#     - name: Compilation
+#       uses: vinay0410/tectonic-action@master
+#       env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         tex_path: 'dir/file.tex'
+#         push: 'yes'
