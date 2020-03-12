@@ -2,7 +2,7 @@
 
 Pull requests with suggestions and improvements, however small or big, are welcome!
 
-The PDFs are not updated automatically. You can either commit your PDF, or wait till it is rebuilt and re-committed, to see your changes. 
-
-
 The changes in lecture slides are going through an automated check.
+
+The PDFs are compiled and updated automatically when PR is merged (thanks to k1rill-fedoseev!). You don't need to update them manually.
+They are also uploaded as workflow artifacts for every new commit pushed into this repository. You can use them to see your changes.
