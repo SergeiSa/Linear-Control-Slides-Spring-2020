@@ -1,0 +1,282 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+
+
+ \pdfmapfile{+sansmathaccent.map}
+ 
+
+\renewcommand{\familydefault}{\rmdefault}
+
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\title{Noise, Information, Observation}
+\author{by Sergei Savin}
+\centering
+\date{Spring 2020}
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+\begin{itemize}
+\item Measurement
+\begin{itemize}
+\item Practical problems
+\item Definitions
+\end{itemize}
+\item Observation
+\begin{itemize}
+\item Errors
+\item Least Squares derivation
+\item Gradient-based method derivation
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Measurement}
+\framesubtitle{How do we know the state?}
+\begin{flushleft}
+
+Before we considered systems and control laws of the following type:
+
+\[
+\begin{cases}
+\dot {\mathbf x} = \mathbf A \mathbf x + \mathbf B \mathbf u\\
+\mathbf u = \mathbf K \mathbf x
+\end{cases}
+\]
+
+But when we implement that control law, how do we know the current value of $\mathbf x$? Previously we always took it from simulation. 
+
+\bigskip
+
+In practice, we take it from \emph{measurement}.
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Measurement}
+\framesubtitle{Why information is imperfect?}
+\begin{flushleft}
+
+There are a number of reasons why we can not directly measure the state of the system. Here are some:
+
+\begin{itemize}
+\item Digital measurements are done in discrete time intervals;
+\item Unpredicted events (faults, collisions, etc.);
+\item Un-modelled kinematics or dynamics (links bending, gear box backlash,  friction, etc.);
+\item Lack of sensors;
+\item Imprecise, nonlinear and biased sensors;
+\item Physics;
+\end{itemize}
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Measurement}
+\framesubtitle{Definition}
+\begin{flushleft}
+
+Let us introduce new notation. Assume we have an LTI system of the following form:
+
+\[
+\begin{cases}
+\dot {\mathbf x} = \mathbf A \mathbf x + \mathbf B \mathbf u\\
+\mathbf y = \mathbf C \mathbf x
+\end{cases}
+\]
+
+Then:
+
+\begin{itemize}
+\item $\mathbf x$ is the state (actual or true state)
+\item $\mathbf y$ is the output (actual or true output)
+\item $\Tilde{\mathbf y}$ is the measured output
+\item $\hat{\mathbf x}$ is the estimated (observed) state
+\item $\hat{\mathbf y}$ is the estimated (observed) output
+\end{itemize}
+
+Notice that we never know true state $\mathbf x$, and therefor for the control purposes we have to use the estimated state $\hat{\mathbf x}$.
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Measurement}
+\framesubtitle{Measurement issues}
+\begin{flushleft}
+
+A general model of the measurement can be given as follows:
+
+\[
+\Tilde{\mathbf y} = \Gamma(\mathbf y)
+\]
+
+where $\mathbf y \in \mathbb{R}^m$ and $\Gamma$ is an operator modelling the measurement process. $\Gamma(\mathbf y)$ can be a function or even a differential equation.
+
+There are however typical cases:
+
+\begin{enumerate}
+\item $\Tilde{\mathbf y} = \mathbf y$
+\item $\Tilde{\mathbf y} = \mathbf C \mathbf y$, where $\text{rank} (\mathbf C) < m$
+\item $\Tilde{\mathbf y} = \mathbf C \mathbf y + \eta(t)$, where $\eta \sim H$ is a random \emph{noise} and $H$ is a distribution from where it is sampled.
+\end{enumerate}
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Observation}
+\framesubtitle{Using the knowledge about dynamics}
+\begin{flushleft}
+
+Let us consider dynamical system
+\[
+\begin{cases}
+\dot {\mathbf x} = \mathbf A \mathbf x\\
+\mathbf y = \mathbf C \mathbf x
+\end{cases}
+\]
+%
+with measurements $\Tilde{\mathbf y}$. We want to get a good estimate of the state $\hat{\mathbf x}$ as we can.
+
+\bigskip
+
+First note: dynamics should also hold for out observation:
+\[
+\hat{\dot {\mathbf x}} = \mathbf A \hat{\mathbf x} 
+\]
+%
+Therefore if we know the initial conditions of our system exactly, and we know out model exactly, we can find exact state of the system without using measurement $\Tilde{\mathbf y}$. This we can call \emph{open loop observation}
+
+Unfortunately, we never know neither model nor initial conditions exactly.
+
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observation}
+\framesubtitle{Observation error}
+\begin{flushleft}
+
+Let us introduce state estimation error $\epsilon = \mathbf x -  \hat{\mathbf x}$. Since $\dot {\mathbf x} = \mathbf A \mathbf x$ and $\hat{\dot {\mathbf x}} = \mathbf A \hat{\mathbf x}$, We can rewrite the previously considered dynamics as follows:
+
+\[
+\dot {\mathbf x} - \hat{\dot {\mathbf x}} = \mathbf A \hat{\mathbf x} - \mathbf A \hat{\mathbf x}
+\]
+therefore:
+\[
+\dot {\epsilon} = \mathbf A \epsilon
+\]
+And if $\dot {\epsilon} = \mathbf A \epsilon$ is stable, the state estimation error will go to zero. However, that only means that knowing that the state of the stable system goes to zero, we can always send the observed state to zero as well.
+
+Prove that if $\hat{\dot {\mathbf x}} = \mathbf A \hat{\mathbf x}$ is stable, $\hat{\mathbf x} = 0$ produces a stable state estimation error dynamics.
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observation}
+\framesubtitle{Observer cost function}
+\begin{flushleft}
+
+In order to introduce \emph{observer} we need to consider \emph{output estimation error} $\varepsilon$:
+%
+\[
+\varepsilon = \mathbf y - \hat{\mathbf y} = \mathbf y - \mathbf C \hat{\mathbf x}
+\]
+%
+We want to minimize the output estimation error. Let us introduce a cost function $J$ accordingly:
+%
+\[
+J = \frac{1}{2} \varepsilon^\top \varepsilon
+\]
+%
+which can be re-written as:
+%
+\[
+J = \frac{1}{2} (\mathbf y - \mathbf C \hat{\mathbf x})^\top (\mathbf y - \mathbf C \hat{\mathbf x}) = 
+\frac{1}{2} (\mathbf y^\top \mathbf y - 
+2 \hat{\mathbf x}^\top \mathbf C^\top \mathbf y + 
+\hat{\mathbf x}^\top \mathbf C^\top \mathbf C \hat{\mathbf x})
+\]
+
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observation}
+\framesubtitle{Least Squares solution}
+\begin{flushleft}
+
+The value of $\hat{\mathbf x}$ that sets cost $J$ to a minimum also sets its derivative to zero:
+%
+\[
+\frac{\partial J}{\partial \hat{\mathbf x}} = 
+-\mathbf C^\top \mathbf y + 
+\mathbf C^\top \mathbf C \hat{\mathbf x} = 0
+\]
+%
+from which we get the expression for the optimal $\hat{\mathbf x}$:
+%
+\[
+ \hat{\mathbf x} = (\mathbf C^\top \mathbf C)^{-1} \mathbf C^\top \mathbf y
+\]
+
+We just derived the analytic solution for the \emph{least squares problem}, which is \emph{Moore-Penrose pseudoinverse}. Short hand notation for it is:
+%
+\[
+ \hat{\mathbf x} = \mathbf C^+ \mathbf y
+\]
+\[
+\mathbf C^+ =  (\mathbf C^\top \mathbf C)^{-1} \mathbf C^\top
+\]
+
+It represent best possible solution, given a single observation round. However, it does not use the dynamics and can change rapidly.
+
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Observation}
+\framesubtitle{Observer derivation}
+\begin{flushleft}
+
+Going a step back, we write:
+%
+\[
+\frac{\partial J}{\partial \hat{\mathbf x}} = 
+-\mathbf C^\top (\mathbf y - 
+\mathbf C \hat{\mathbf x})
+\]
+%
+which is the same as:
+%
+\[
+\frac{\partial J}{\partial \hat{\mathbf x}} = -\mathbf C^\top \varepsilon
+\]
+
+Here, instead of setting the gradient equal to zero, we calculate it for the given value of $\varepsilon$ and do a gradient descent.
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}
+\centerline{Lecture slides are available via Moodle.}
+\bigskip
+\centerline{You can help improve these slides at:}
+\centerline{\url{https://github.com/SergeiSa/Linear-Control-Slides-Spring-2020}}
+\bigskip
+\centerline{Check Moodle for additional links, videos, textbook suggestions.}
+\end{frame}
+
+\end{document}
