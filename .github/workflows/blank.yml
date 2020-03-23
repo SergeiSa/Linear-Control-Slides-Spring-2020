@@ -31,6 +31,21 @@ jobs:
           root_file: main.tex
           working_directory: lecture_slides/Optimal_Control_of_LTI_systems/
 
+      - name: Compile LaTeX document for Noise_Information_Observation
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: main.tex
+          working_directory: lecture_slides/Noise_Information_Observation/
+
+      - name: Compile LaTeX document for Observer_Design_Kalman_Filter
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: main.tex
+          working_directory: lecture_slides/Observer_Design_Kalman_Filter/
+
+
+
+
       - name: Save Discrete_Systems artifact
         uses: actions/upload-artifact@v1
         with:
@@ -43,6 +58,22 @@ jobs:
           name: Optimal_Control_of_LTI_systems.pdf
           path: lecture_slides/Optimal_Control_of_LTI_systems/main.pdf
 
+      - name: Save Noise_Information_Observation artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Noise_Information_Observation.pdf
+          path: lecture_slides/Noise_Information_Observation/main.pdf
+
+      - name: Save Observer_Design_Kalman_Filter artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Observer_Design_Kalman_Filter.pdf
+          path: lecture_slides/Observer_Design_Kalman_Filter/main.pdf
+
+
+
+
+
       - name: Update compiled PDFs in git repository
         if: github.event.pull_request.merged == true || (github.event_name == 'push' && github.ref == 'refs/heads/master')
         run: |
@@ -50,5 +81,7 @@ jobs:
           git config --global user.email '<>'
           git add lecture_slides/Discrete_Systems/main.pdf
           git add lecture_slides/Optimal_Control_of_LTI_systems/main.pdf
+          git add lecture_slides/Noise_Information_Observation/main.pdf
+          git add lecture_slides/Observer_Design_Kalman_Filter/main.pdf
           git commit -m "Update compiled PDFs"
           git push
