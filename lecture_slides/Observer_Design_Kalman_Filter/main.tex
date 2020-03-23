@@ -1,0 +1,382 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+
+
+ \pdfmapfile{+sansmathaccent.map}
+ 
+\renewcommand{\familydefault}{\rmdefault}
+
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\title{Observer Design, Kalman Filter}
+\author{by Sergei Savin}
+\centering
+\date{Spring 2020}
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+\begin{itemize}
+\item Observer Design
+\begin{itemize}
+\item Observer as a controllable LTI
+\item Estimation error dynamics
+\item State estimation error stability
+\item Observer Design vs Controller design
+\item Special case
+\item General case: design via Riccati eq.
+\end{itemize}
+
+\item  Kalman Filter
+\begin{itemize}
+\item System with noise and disturbances
+\item Estimates definitions
+\item Estimate updates
+\item Knows and unknowns
+\item Covariance update and Kalman gain
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Observer Design}
+\framesubtitle{Observer as a controllable LTI}
+\begin{flushleft}
+
+
+\begin{itemize}
+\item From the previous lecture we remember that we wanted the estimate of the state to have the same dynamics as the actual state.
+\item We also remember that we want to take into account the error between the estimated and measured output $\mathbf y$
+\end{itemize}
+
+\bigskip
+
+Assume the measurement is perfect: $\hat{\mathbf y} = \mathbf y$. Then we can propose observer as the following dynamical system:
+
+\[
+\hat{\dot {\mathbf x}} = \mathbf A \hat{\mathbf x} + \mathbf B \mathbf u + \mathbf L(\mathbf y - \hat{\mathbf y})
+\]
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Observer Design}
+\framesubtitle{Estimation error dynamics}
+\begin{flushleft}
+
+Remember that state estimation error is $\epsilon = \mathbf x -  \hat{\mathbf x}$ and the actual dynamics of the system is:
+%
+\[
+\begin{cases}
+\dot {\mathbf x} = \mathbf A \mathbf x + 
+\mathbf B \mathbf u \\
+\mathbf y = \mathbf C \mathbf x 
+\end{cases}
+\]
+%
+Then, we can write the state estimation error dynamics:
+%
+\[
+\hat{\dot {\mathbf x}} - \dot {\mathbf x} = 
+\mathbf A \hat{\mathbf x} - \mathbf A \mathbf x
++ \mathbf B \mathbf u - \mathbf B \mathbf u 
++ \mathbf L(\mathbf y - \hat{\mathbf y})
+\]
+%
+or:
+%
+\[
+\dot {\epsilon} = \mathbf A \epsilon + 
+\mathbf L(\mathbf C \mathbf x - \mathbf C \hat{\mathbf x})
+\]
+%
+or:
+%
+\[
+\dot {\epsilon} = \mathbf A \epsilon - 
+\mathbf L \mathbf C \epsilon
+\]
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Observer Design}
+\framesubtitle{State estimation error stability}
+\begin{flushleft}
+
+Thus, with the proposed observer, state estimation error is:
+
+\[
+\dot {\epsilon} = (\mathbf A - 
+\mathbf L \mathbf C) \epsilon
+\]
+
+From which immediately follows that the observer is \emph{stable} (i.e., the state estimation error tends to zero), as long as the following matrix is negative-definite:
+
+\[
+\mathbf A - 
+\mathbf L \mathbf C < 0
+\]
+
+We need to find $\mathbf L$.
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Observer Design}
+\framesubtitle{Observer Design vs Controller design}
+\begin{flushleft}
+
+Let us observe the key difference between observer design and controller design.
+
+\bigskip
+
+Controller design: find such $\mathbf K$ that:
+
+\[
+\mathbf A - 
+\mathbf B \mathbf K < 0
+\]
+
+Observer design: find such $\mathbf L$ that:
+
+\[
+\mathbf A - 
+\mathbf L \mathbf C < 0
+\]
+
+We have instruments for finding $\mathbf K$, what about $\mathbf L$?
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observer Design}
+\framesubtitle{Special case}
+\begin{flushleft}
+
+Assume that $\mathbf C$ is identity $\mathbf I$. Then the observer design problem becomes: 
+
+\begin{itemize}
+    \item find such $\mathbf L$ that $\mathbf A - \mathbf L \mathbf I < 0$.
+\end{itemize}
+
+Which is equivalent to the problem: 
+
+\begin{itemize}
+    \item find such $\mathbf L$ that $\mathbf A - \mathbf B  \mathbf L < 0$, where $\mathbf B = \mathbf I$.
+\end{itemize}
+
+And in that formulation, it is equivalent to the controller design problem, which we know how to solve.
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observer Design}
+\framesubtitle{General case: design via Riccati eq.}
+\begin{flushleft}
+
+In general, we can observe that if $\mathbf A - \mathbf L \mathbf C$ is negative-definite, then $(\mathbf A - 
+\mathbf L \mathbf C)^{\top}$ is negative-definite too (by definition of the negative-definiteness). 
+
+\bigskip
+
+Therefore, we can solve the following \emph{dual problem}:
+
+\begin{itemize}
+    \item find such $\mathbf L$ that $\mathbf A^{\top} - 
+\mathbf C^{\top} \mathbf L^{\top} < 0$.
+\end{itemize}
+
+\bigskip
+
+The dual problem is \emph{equivalent} to the control design problem. We can solve it by producing and solving algebraic Riccati equation, as in the LQR formulation. In pseudo-code it can be represented the following way:
+
+\bigskip
+
+$\mathbf L^{\top}$ \texttt{= lqr}($\mathbf A^{\top}$, $\mathbf C^{\top}$, $\mathbf Q$, $\mathbf R$).
+
+where $\mathbf Q$ and $\mathbf R$ are weight  matrices, determining the "sensitivity" or "aggressiveness" of the observer.
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Kalman Filter}
+\framesubtitle{System with noise and disturbances}
+\begin{flushleft}
+
+Assume we have a discrete linear system with disturbance and noise:
+
+\[
+\begin{cases}
+\mathbf x_{i+1} = \mathbf A \mathbf x_i + 
+\mathbf B \mathbf u_i + \mathbf w\\
+\mathbf y_i = \mathbf C \mathbf x_i  + \mathbf v
+\end{cases}
+\]
+
+where $\mathbf w$ and $\mathbf v$ are disturbance and noise, both are random processes. Covariance matrix of $\mathbf w$ is $\mathbf W$, covariance matrix of $\mathbf v$ is $\mathbf V$.
+
+\bigskip
+
+Our estimation $\hat{\mathbf x}$ is now done is two steps: after dynamics update, and after sensor update. We will use the following notation for it:
+
+\begin{itemize}
+    \item $\hat{\mathbf x}_{i|i-1}$ is the $i$-th step estimate after dynamics update; also called an \emph{a priori} estimate.
+    \item $\hat{\mathbf x}_{i|i}$ is the estimate after sensor update; also called an \emph{a posteriori} estimate.
+\end{itemize}
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Kalman Filter}
+\framesubtitle{Estimates covariances}
+\begin{flushleft}
+
+
+Both estimates $\hat{\mathbf x}_{i|i-1}$ and $\hat{\mathbf x}_{i|i}$ have associated state estimation errors:
+
+\begin{itemize}
+    \item $\epsilon_{i|i-1} = \mathbf x_i - \hat{\mathbf x}_{i|i-1}$
+    \item $\epsilon_{i|i} = \mathbf x_i - \hat{\mathbf x}_{i|i}$
+\end{itemize}
+
+\bigskip
+
+Those state estimation errors have their covariance matrices:
+
+\begin{itemize}
+    \item $\mathbf P_{i|i-1} = \text{cov}(\epsilon_{i|i-1})$, 
+    \item $\mathbf P_{i|i} = \text{cov}(\epsilon_{i|i})$
+\end{itemize}
+
+We can consider the output estimation error $\varepsilon_i = \mathbf y_i - \mathbf C \hat{\mathbf x}_{i|i-1}$ and its covariance matrix $\mathbf Y_i$: 
+
+\[
+\mathbf Y_i = \text{cov}(\mathbf y_i - \mathbf C \hat{\mathbf x}_{i|i-1})
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Kalman Filter}
+\framesubtitle{Estimate updates}
+\begin{flushleft}
+
+
+We know that $\hat{\mathbf x}_{i|i-1}$ can be found as follows:
+
+\[
+\hat{\mathbf x}_{i|i-1} = \mathbf A \hat{\mathbf x}_{i-1|i-1} + \mathbf B \mathbf u_i
+\]
+
+where $\hat{\mathbf x}_{i-1|i-1}$ is the estimate on the previous time step.
+
+\bigskip
+
+We will search for the update law for the a posteriori estimate $\hat{\mathbf x}_{i|i}$ in the following form:
+
+\[
+\hat{\mathbf x}_{i|i} = \hat{\mathbf x}_{i|i-1} + 
+\mathbf K_i (\mathbf y_i - \mathbf C \hat{\mathbf x}_{i|i-1})
+\]
+
+We need to find $\mathbf K_i$, which is the Kalman filter gain.
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Kalman Filter}
+\framesubtitle{Knows and unknowns}
+\begin{flushleft}
+
+We know or measure:
+
+\begin{itemize}
+    \item $\mathbf A$, $\mathbf B$ and $\mathbf C$
+    \item $\mathbf W$ and $\mathbf V$
+    \item $\mathbf y_i$
+\end{itemize}
+
+\bigskip
+
+We need to find:
+
+\begin{itemize}
+    \item $\hat{\mathbf x}_{i|i-1}$ and $\hat{\mathbf x}_{i|i}$
+    \item $\mathbf K_i$
+    \item $\mathbf Y_i$, $\mathbf P_{i|i-1}$ and $\mathbf P_{i|i}$
+\end{itemize}
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Kalman Filter}
+\framesubtitle{Covariance update and Kalman gain}
+\begin{flushleft}
+
+There is a formula for the a priori estimation covariance update:
+
+\[
+\mathbf P_{i|i-1} = 
+\mathbf A \mathbf P_{i-1|i-1} \mathbf A^{\top} + \mathbf W
+\]
+
+And a formula for the measurement covariance:
+
+\[
+\mathbf Y_i = 
+\mathbf C \mathbf P_{i|i-1} \mathbf C^{\top} + \mathbf V
+\]
+
+With those two, we can find the Kalman filter gain:
+
+\[
+\mathbf K_i = 
+\mathbf P_{i|i-1} \mathbf C^{\top} \mathbf Y_i^{-1}
+\]
+
+Now we can find the a posteriori covariance:
+
+\[
+\mathbf P_{i|i} = 
+(\mathbf I - \mathbf K_i \mathbf C) \mathbf P_{i|i-1}
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}
+\centerline{Lecture slides are available via Moodle.}
+\bigskip
+\centerline{You can help improve these slides at:}
+\centerline{\url{https://github.com/SergeiSa/Linear-Control-Slides-Spring-2020}}
+\bigskip
+\centerline{Check Moodle for additional links, videos, textbook suggestions.}
+\end{frame}
+
+\end{document}
