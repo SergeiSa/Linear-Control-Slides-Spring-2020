@@ -1,0 +1,275 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+
+
+ \pdfmapfile{+sansmathaccent.map}
+ 
+\renewcommand{\familydefault}{\rmdefault}
+
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\title{Parameter estimation}
+\author{by Sergei Savin}
+\centering
+\date{Spring 2020}
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+\begin{itemize}
+\item Parameter estimation
+\begin{itemize}
+\item Problem statement
+\item Parameter uncertainty sources
+\item Problem statement - more precise
+\item System Linear in Parameters
+\item Example
+\end{itemize}
+\item Least Squares in parameter estimation
+\begin{itemize}
+\item Problem statement
+\item Solution
+\item Multiple measurements
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Parameter estimation}
+\framesubtitle{Problem statement}
+\begin{flushleft}
+
+Assume we have a system, whose model is defined in terms of parameters $\theta$:
+
+\[
+\dot {\mathbf x} = \mathbf f(\mathbf x, \mathbf u, \theta)
+\]
+
+Task: knowing relations $\mathbf f(\mathbf x, \mathbf u) = \mathbf f(\mathbf x, \mathbf u, \theta)$, find a stabilizing control law.
+
+\bigskip
+
+In case of a linear system, the dynamics is given in the form:
+\[
+\dot {\mathbf x} = \mathbf A(\theta) \mathbf x + \mathbf B(\theta) \mathbf u
+\]
+
+and the task is: knowing relations $\mathbf A = \mathbf A(\theta)$ and $\mathbf B = \mathbf B(\theta)$, find a stabilizing control law.
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Parameter estimation}
+\framesubtitle{Parameter uncertainty sources}
+\begin{flushleft}
+
+There are a number of reasons parameters of the model can be unknown:
+
+\begin{itemize}
+\item  Parameters that can’t be measured.
+\item  Parameters change with time.
+\item  Unmodeled dynamics.
+\item  Unknown forces.
+\item  Dynamic changes in the system (picking up a load, etc).
+\end{itemize}
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Parameter estimation}
+\framesubtitle{Problem statement - Example 1}
+\begin{flushleft}
+
+Unfortunately, in order to treat the problem we need to assume that we can, directly or indirectly, measure higher order derivatives.
+
+\bigskip
+
+\emph{Example 1}
+
+Let us consider spring-damper system: $m \ddot q + \mu \dot q + k q = u$. Introducing notation $y = u$ we arrive at:
+\[
+y = m \ddot q + \mu \dot q + k q
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Parameter estimation}
+\framesubtitle{Problem statement - Example 2}
+\begin{flushleft}
+
+\emph{Example 2}
+
+Consider a general mechanical system:
+\[
+\mathbf H \ddot {\mathbf q} + \mathbf c(\dot {\mathbf q}, \mathbf q) = \mathbf u
+\]
+
+This system is \emph{linear} with respect to parameters such as $m_i$, $l_i l_j$, $l_i^2$, $m_i l_i^2$, $m_i g$, etc., where $l_i$ are lengths, $m_i$ are masses, $g$ is the gravitational acceleration. Same as before, we make $y = u$. Therefore we can rewrite it as follows:
+\[
+\mathbf y = \mathbf Y (\ddot {\mathbf q}, \dot {\mathbf q}, \mathbf q) \theta
+\]
+where matrix $\mathbf Y$ can be a nonlinear function of the coordinates $\mathbf q$ and their derivatives. It is called a \emph{regressor}.
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Parameter estimation}
+\framesubtitle{System Linear in Parameters}
+\begin{flushleft}
+
+From here on we assume that we measure $\mathbf y$ and we know that $\mathbf y$ is a function of state and it's derivatives, and parameters $\theta$. 
+
+Moreover, we assume that $\mathbf y$ is \emph{linear with respect to parameters} $\theta$:
+
+\[
+\mathbf y = \mathbf M (\mathbf x, \dot {\mathbf x}) \theta
+\]
+
+where $\mathbf M$ will be referred to as regressor matrix.
+
+\bigskip
+
+We introduce definitions:
+
+\begin{itemize}
+    \item $\Tilde{\theta}$ - estimated value of parameters $\theta$;
+    \item $\varepsilon_{\theta} = \theta - \Tilde{\theta}$ - parameter estimation error;
+    \item $\mathbf e_{\theta} = \mathbf y - \mathbf M \Tilde{\theta}$ - parameter estimation output error.
+\end{itemize}
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Parameter estimation}
+\framesubtitle{Example}
+\begin{flushleft}
+
+Going back to the spring-damper system $y = m \ddot q + \mu \dot q + k q$, we can denote:
+
+\begin{itemize}
+    \item $\mathbf M = [\ddot q \; \dot q \; q]$ - regressor matrix;
+    \item $\theta = [m \; \mu \; k]^\top$ - parameters;
+\end{itemize}
+
+Thus we get:
+
+\[
+y = [\ddot q \; \dot q \; q] [m \; \mu \; k]^\top = \mathbf M \theta
+\]
+
+Another example is a pendulum: $y = m l^2 \ddot \varphi + m g l sin(\varphi)$. We can denote:
+\begin{itemize}
+    \item $\mathbf M = [\ddot \varphi \; sin(\varphi)]$ - regressor matrix;
+    \item $\theta = [m l^2 \; m g l]^\top$ - parameters;
+\end{itemize}
+Thus we get:
+
+\[
+y = [\ddot \varphi \; sin(\varphi)] [m l^2 \; m g l]^\top = \mathbf M \theta
+\]
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Least Squares in parameter estimation}
+\framesubtitle{Problem statement}
+\begin{flushleft}
+
+We want to minimize parameter estimation error $\varepsilon_{\theta}$. However, we do not measure it directly. Let us instead minimize directly measured parameter estimation output error $\mathbf e_{\theta}$. 
+
+To this end we introduce a cost function $J$:
+
+\[
+J = \frac{1}{2} \mathbf e_{\theta}^\top \mathbf e_{\theta}
+\]
+
+Expanding the definition, we get:
+
+\[
+J = \frac{1}{2} (\mathbf y - \mathbf M \Tilde{\theta})^\top (\mathbf y - \mathbf M \Tilde{\theta}) = 
+\frac{1}{2} (\mathbf y^\top \mathbf y - 
+2 \Tilde{\theta}^\top \mathbf M^\top \mathbf y + 
+\Tilde{\theta}^\top \mathbf M^\top \mathbf M \Tilde{\theta})
+\]
+
+Derivative of $J$ with respect to parameters estimate is:
+\[
+\frac{\partial J}{\partial \Tilde{\theta}} = 
+-\mathbf M^\top \mathbf y + 
+\mathbf M^\top \mathbf M \Tilde{\theta}
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Least Squares in parameter estimation}
+\framesubtitle{Solution}
+\begin{flushleft}
+
+We know that when the optimal estimation is found, the derivative $\frac{\partial J}{\partial \Tilde{\theta}}$ of the cost function will be equal to zero. Therefore:
+\[
+\frac{\partial J}{\partial \Tilde{\theta}} = 
+-\mathbf M^\top \mathbf y + 
+\mathbf M^\top \mathbf M \Tilde{\theta} = 0
+\]
+\[
+ \Tilde{\theta} = (\mathbf M^\top \mathbf M)^{-1} \mathbf M^\top \mathbf y
+\]
+
+This presents the \emph{least squares solution} for the estimation problem.
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Least Squares in parameter estimation}
+\framesubtitle{Multiple measurements}
+\begin{flushleft}
+
+If the parameters $\theta$ are constant, we can use \emph{multiple measurements} to find them. Let us denote the value of $\mathbf M$ matrix for $i$-th measurement as $\mathbf M_i$ and the corresponding value of output vector $\mathbf y$ as $\mathbf y_i$. 
+
+Then we can introduce compound output and estimation matrices for $n$ measurements:
+\[
+ \bar{\mathbf M} = \begin{bmatrix} \mathbf M_1 \\ ... \\ \mathbf M_n \end{bmatrix}
+\]
+\[
+ \bar{\mathbf y} = \begin{bmatrix} \mathbf y_1 \\ ... \\ \mathbf y_n \end{bmatrix}
+\]
+
+Then we can use least squares to determine optimal parameter estimate same as before:
+\[
+ \Tilde{\theta} = (\bar{\mathbf M}^\top \bar{\mathbf M})^{-1} \bar{\mathbf M}^\top \bar{\mathbf y}
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}
+\centerline{Lecture slides are available via Moodle.}
+\bigskip
+\centerline{You can help improve these slides at:}
+\centerline{\url{https://github.com/SergeiSa/Linear-Control-Slides-Spring-2020}}
+\bigskip
+\centerline{Check Moodle for additional links, videos, textbook suggestions.}
+\end{frame}
+
+\end{document}
