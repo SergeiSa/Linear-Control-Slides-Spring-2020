@@ -43,6 +43,13 @@ jobs:
           root_file: main.tex
           working_directory: lecture_slides/Observer_Design_Kalman_Filter/
 
+      - name: Compile LaTeX document for Parameter_Estimation
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: main.tex
+          working_directory: lecture_slides/Parameter_Estimation/
+
+
 
 
 
@@ -70,6 +77,11 @@ jobs:
           name: Observer_Design_Kalman_Filter.pdf
           path: lecture_slides/Observer_Design_Kalman_Filter/main.pdf
 
+      - name: Save Parameter_Estimation artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Parameter_Estimation.pdf
+          path: lecture_slides/Parameter_Estimation/main.pdf
 
 
 
@@ -83,5 +95,6 @@ jobs:
           git add lecture_slides/Optimal_Control_of_LTI_systems/main.pdf
           git add lecture_slides/Noise_Information_Observation/main.pdf
           git add lecture_slides/Observer_Design_Kalman_Filter/main.pdf
+          git add lecture_slides/Parameter_Estimation/main.pdf
           git commit -m "Update compiled PDFs"
           git push
