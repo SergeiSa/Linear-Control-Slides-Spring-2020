@@ -67,8 +67,8 @@ https://cds.cern.ch/record/1100534/files/p73.pdf
   * Control theory by S. Simrock - section 7 (goes to z-transform, which is outside the scope of our course)
 https://cds.cern.ch/record/1100534/files/p73.pdf
 * Astolfi, A., 2006. Systems and Control Theory: An Introduction. Imperial College London lecture notes:
-* * 1.2.9 Approximate discrete-time models;
-* * Proposition 2.3 (Trajectories of linear, discrete-time, systems) - on Controllability:
+  * 1.2.9 Approximate discrete-time models;
+  * Proposition 2.3 (Trajectories of linear, discrete-time, systems) - on Controllability:
 http://www3.imperial.ac.uk/pls/portallive/docs/1/31851696.PDF
 * Dahleh, M., Dahleh, M.A. and Verghese, G., 2004. Lectures on dynamic systems and control. A+ A, 4(100), pp.1-100. (goes to z-transform, which is outside the scope of our course):
 https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-241j-dynamic-systems-and-control-spring-2011/readings/MIT6_241JS11_chap10.pdf
