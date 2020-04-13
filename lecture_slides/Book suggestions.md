@@ -30,14 +30,14 @@ http://www3.imperial.ac.uk/pls/portallive/docs/1/31851696.PDF
 * Cho W. S. To, Introduction to Dynamics and Control in Mechanical Engineering Systems. 
   * 2 Review of Laplace Transforms 
   * 8.3 Transfer Functions
-  * Control theory by S. Simrock - sections 2, 3 and 4:
+* Control theory by S. Simrock - sections 2, 3 and 4:
 https://cds.cern.ch/record/1100534/files/p73.pdf
 
 
 ## Lecture 4. Stabilizing control
-  * Control theory by S. Simrock - sections 5, 6 (stability discussed in terms of TF):
+* Control theory by S. Simrock - sections 5, 6 (stability discussed in terms of TF):
 https://cds.cern.ch/record/1100534/files/p73.pdf
-  * Module 9: State Feedback Control Design, Lecture Note 1:
+* Module 9: State Feedback Control Design, Lecture Note 1:
 https://nptel.ac.in/content/storage2/courses/108103008/PDF/module9/m9_lec1.pdf
 * 16.31 Feedback Control Systems
 https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-30-feedback-control-systems-fall-2010/lecture-notes/MIT16_30F10_lec11.pdf
@@ -54,7 +54,7 @@ https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-30-feedback-control-
    [Link](http://underactuated.csail.mit.edu/dp.html#section3)
  * Underactuated Robotics. Linear Quadratic Regulators
    [Link](http://underactuated.csail.mit.edu/lqr.html)
-  * Control theory by S. Simrock - section 8:
+ * Control theory by S. Simrock - section 8:
 https://cds.cern.ch/record/1100534/files/p73.pdf
 
 
