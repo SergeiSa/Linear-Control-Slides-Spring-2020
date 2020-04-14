@@ -1,0 +1,261 @@
+\documentclass{beamer}
+
+ \pdfmapfile{+sansmathaccent.map}
+
+
+\mode<presentation>
+{
+  \usetheme{Madrid}      % or try Darmstadt, Madrid, Warsaw, ...
+%   \usecolortheme{beaver} % or try albatross, beaver, crane, ...
+  \usefonttheme{serif}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+
+\renewcommand{\familydefault}{\rmdefault}
+
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\title{Adaptive Control}
+\author{by Sergei Savin}
+\centering
+\date{Spring 2020}
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+\begin{itemize}
+\item Feed-forward Adaptive Control
+\begin{itemize}
+\item Parameter estimation
+\item FF control of mechanical systems
+\end{itemize}
+\item Feedback Adaptive Control
+\begin{itemize}
+\item LQR
+\end{itemize}
+\item Real-time Parameter Estimation
+\begin{itemize}
+\item Linear feedback form
+\item Parameter estimation error dynamics
+\item Parameter estimation error dynamics stability
+\end{itemize}
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Feed-forward Adaptive Control}
+\framesubtitle{Parameter estimation}
+\begin{flushleft}
+
+Last time we learned that we can represent a system in the form:
+%
+\[
+\mathbf y = \mathbf M (\mathbf x, \dot {\mathbf x}) \theta
+\]
+%
+and then collect data and solve it for $\theta$ via Linear Least Squares or, equivalently, we pseudoinverse. 
+
+\bigskip
+
+Let us demonstrate how it can be used to generate feedback control.
+
+\end{flushleft}
+\end{frame}
+
+\begin{frame}{Feed-forward Adaptive Control}
+\framesubtitle{FF control of mechanical systems}
+\begin{flushleft}
+
+One example of a system for which we can do it is the following:
+\[
+\mathbf H \ddot {\mathbf q} + \mathbf c(\dot {\mathbf q}, \mathbf q) = \mathbf u
+\; \; \; \Leftrightarrow \; \; \; 
+\begin{cases}
+\mathbf y = \mathbf Y (\ddot {\mathbf q}, \dot {\mathbf q}, \mathbf q) \theta \\
+\mathbf u \equiv \mathbf y
+\end{cases}
+\]
+%
+(see previous lecture for notation and derivation)
+
+\bigskip
+
+Assume we have desired trajectory $\mathbf q^* = \mathbf q^*(t)$ and we found precise values of $\theta$. Then we can define control as follows:
+%
+\[
+\mathbf u = \mathbf K_p (\mathbf q^* - \mathbf q) +
+            \mathbf K_d (\dot{\mathbf q}^* - \dot{\mathbf q}) +
+            \mathbf Y (\ddot {\mathbf q}^*, \dot {\mathbf q}, \mathbf q) \theta
+\]
+
+where 
+\[
+\mathbf Y (\ddot {\mathbf q}^*, \dot {\mathbf q}, \mathbf q) \theta = 
+\mathbf H \ddot {\mathbf q}^* + \mathbf c(\dot {\mathbf q}, \mathbf q)
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Feed-forward Adaptive Control}
+\framesubtitle{FF control of mechanical systems}
+\begin{flushleft}
+
+Let's prove that the proposed control is stable. We know that:
+%
+\[
+\begin{cases}
+\mathbf H \ddot {\mathbf q} + \mathbf c(\dot {\mathbf q}, \mathbf q) = \mathbf u \\
+\mathbf u = \mathbf K_p (\mathbf q^*- \mathbf q) +
+            \mathbf K_d (\dot{\mathbf q}^*- \dot{\mathbf q}) +
+            \mathbf H \ddot {\mathbf q}^* + \mathbf c(\dot {\mathbf q}, \mathbf q)
+\end{cases}
+\]
+%
+then, introducing $\mathbf e = \mathbf q^* - \mathbf q$, and choosing $\mathbf K_p = \mathbf H \mathbf D_p$ and $\mathbf K_d = \mathbf H \mathbf D_d$, where $\mathbf D_p > 0$ and $\mathbf D_d > 0$ are positive-definite diagonal matrices:
+\[
+\mathbf H \ddot {\mathbf q}^* - \mathbf H \ddot {\mathbf q} +
+\mathbf c(\dot {\mathbf q}, \mathbf q) - 
+\mathbf c(\dot {\mathbf q}, \mathbf q) + 
+\mathbf K_p (\mathbf q^*- \mathbf q) +
+\mathbf K_d (\dot{\mathbf q}^*- \dot{\mathbf q}) = \mathbf 0
+\]
+\[
+\mathbf H \ddot {\mathbf e} + \mathbf K_d \dot{\mathbf e} + \mathbf K_p \mathbf e = \mathbf 0
+\]
+\[
+\ddot {\mathbf e} + \mathbf D_d \dot{\mathbf e} + \mathbf D_p \mathbf e = \mathbf 0
+\]
+
+And thus we got a system of independent second order linear differential equations with strictly positive coefficients, which are stable:
+\[
+\ddot {e}_i + d_{d, i} \dot{e}_i + d_{p, i} e_i = 0
+\]
+
+
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Feedback Adaptive Control}
+\framesubtitle{LQR}
+\begin{flushleft}
+
+Assume we had a linear system, whose model is a function of the estimated parameters $\theta$:
+
+\[
+\mathbf A = \mathbf A(\theta),  \; \; \mathbf B = \mathbf B(\theta)
+\]
+
+Then if we know a good estimate of the parameters $\Tilde{\theta}$, we can use matrices $\mathbf A$ and $\mathbf B$ to solve Riccati eq.
+
+\[
+\begin{cases}
+\mathbf Q - \mathbf S \mathbf B(\Tilde{\theta}) \mathbf  R^{-1} \mathbf B^\top(\Tilde{\theta}) \mathbf S + 2 \mathbf S \mathbf A(\Tilde{\theta}) = 0 \\
+\mathbf  u = -\mathbf R^{-1} \mathbf B^\top(\Tilde{\theta}) \mathbf S \mathbf x
+\end{cases}
+\]
+
+However, this guarantees neither optimality, nor stability.
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Real-time Parameter Estimation}
+\framesubtitle{Linear feedback form}
+\begin{flushleft}
+
+In order to use control methods discussed previously, we need to be able to estimate parameters on the fly. This is especially true if the parameters are changing in time.
+
+We can estimate parameters in real time same as we did with state estimation, using a linear feedback law:
+
+\[
+\frac{d}{dt}\Tilde{\theta} = \Gamma \mathbf M^\top \mathbf e_{\theta}
+\]
+%
+where $\mathbf M$ is a regressor matrix. 
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Real-time Parameter Estimation}
+\framesubtitle{Parameter estimation error dynamics}
+\begin{flushleft}
+
+Since $\mathbf e_{\theta} = \mathbf y - \mathbf M \Tilde{\theta}$, we have:
+%
+\[
+\frac{d}{dt}\Tilde{\theta} = \Gamma \mathbf M^\top (\mathbf y - \mathbf M \Tilde{\theta})
+\]
+
+By definition $\varepsilon_{\theta} = \theta - \Tilde{\theta}$ and $\frac{d}{dt}\varepsilon_{\theta} = \frac{d}{dt}\theta - \frac{d}{dt}\Tilde{\theta}$, and if we assume that $\frac{d}{dt}\theta = 0$, we get:
+%
+\[
+\frac{d}{dt}\varepsilon_{\theta} = \Gamma \mathbf M^\top (\mathbf M (\theta - \varepsilon_{\theta}) - \mathbf y)
+= \Gamma \mathbf M^\top (\mathbf M \theta - \mathbf M \varepsilon_{\theta} - \mathbf M \theta)
+\]
+%
+where we used the fact that by definition $\mathbf M \theta = \mathbf y$. Finally, we get the parameter estimation error dynamics equation:
+%
+\[
+\frac{d}{dt}\varepsilon_{\theta}
+= - \Gamma \mathbf M^\top \mathbf M \varepsilon_{\theta}
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Real-time Parameter Estimation}
+\framesubtitle{Parameter estimation error dynamics stability}
+\begin{flushleft}
+
+In order to achieve correct estimates of parameters, parameter estimation error dynamics needs to be stable:
+\[
+- \Gamma \mathbf M^\top \mathbf M  < 0
+\]
+
+This means that we need to find such $\Gamma$ that $\Gamma \mathbf M^\top \mathbf M > 0$. This is a non-trivial task. If $\text{null} (\mathbf M^\top \mathbf M)  \neq 0$, then it is generally impossible.
+
+\bigskip
+
+If $\mathbf M^\top \mathbf M$ is invertible, we can choose $\Gamma$ as:
+
+\[
+\Gamma = \mathbf D (\mathbf M^\top \mathbf M)^{-1}
+\]
+%
+where $\mathbf D > 0$. Then $-\Gamma \mathbf M^\top \mathbf M = -\mathbf D  < 0$, and the estimator will be stable.
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}
+\centerline{Lecture slides are available via Moodle.}
+\bigskip
+\centerline{You can help improve these slides at:}
+\centerline{\url{https://github.com/SergeiSa/Linear-Control-Slides-Spring-2020}}
+\bigskip
+\centerline{Check Moodle for additional links, videos, textbook suggestions.}
+\end{frame}
+
+\end{document}
