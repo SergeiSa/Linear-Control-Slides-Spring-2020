@@ -1,6 +1,4 @@
-
-Discrete_Systems/main.log
-Discrete_Systems/main.synctex.gz
+.gitignore
 *.log
 *.gz
 *.pdf
