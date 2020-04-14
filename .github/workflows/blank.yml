@@ -49,7 +49,11 @@ jobs:
           root_file: main.tex
           working_directory: lecture_slides/Parameter_Estimation/
 
-
+      - name: Compile LaTeX document for Adaptive_Control
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: main.tex
+          working_directory: lecture_slides/Adaptive_Control/
 
 
 
@@ -83,6 +87,12 @@ jobs:
           name: Parameter_Estimation.pdf
           path: lecture_slides/Parameter_Estimation/main.pdf
 
+      - name: Save Adaptive_Control artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Adaptive_Control.pdf
+          path: lecture_slides/Adaptive_Control/main.pdf
+
 
 
 
@@ -96,5 +106,6 @@ jobs:
           git add lecture_slides/Noise_Information_Observation/main.pdf
           git add lecture_slides/Observer_Design_Kalman_Filter/main.pdf
           git add lecture_slides/Parameter_Estimation/main.pdf
+          git add lecture_slides/Adaptive_Control/main.pdf
           git commit -m "Update compiled PDFs"
           git push
