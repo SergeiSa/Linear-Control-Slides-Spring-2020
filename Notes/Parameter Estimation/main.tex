@@ -1,0 +1,89 @@
+
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1.5in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,hyperref,bm}
+\author{Natalia Matrosova}
+\title{Lecture notes: Parameter Estimation}
+
+
+\begin{document}
+\maketitle
+
+\large % please keep the text at this size for ease of reading.
+
+% ------------------------------------------ %
+%                 START HERE             %
+% ------------------------------------------ %
+
+
+\begin{flushleft}
+
+{\Large These document contains my notes that helped me to understand the lecture slides. Here are the questions that were asked during the lecture and some important catches that were given by professor Savin verbally, that are not in the lecture slides. } 
+\end{flushleft}
+
+\vspace{0.05in}
+
+
+\begin{center}
+    About problem statement:
+\end{center}
+
+\begin{flushleft}
+According to the problem statement we have a system, whose model is defined in terms of parameter $\theta$.
+We need to find a stabilizing control law knowing the relations: $\bm{f(x, u) = f(x, u, \theta)}$.
+\bigskip
+We cannot get from the current step, but we can use the "historical" higher order derivatives from the previous step. The other part of the lecture is about how can we use Least squares to estimate the parameters.
+\bigskip
+We need to perform several experiments to estimate the parameters (the more experiments the better approximation). However, since we need to use historical data to approximate the higher order derivatives, we do not know which control to apply while we performing these experiments. This question is the subject of the next lecture.
+\end{flushleft}
+
+\begin{center}
+    Example 1: why is it important that $y = u$?
+\end{center}
+\begin{flushleft}
+Initially we have the system:
+\[
+\bm{m \ddot{q} + \mu \dot{q} + kq = u}
+\]
+Then we introduced the notation $\bm{y = u}$ and get:
+
+\[
+\bm{y = m \ddot{q} + \mu \dot{q} + kq}
+\]
+
+We always can measure $\bm{y}$ by measuring $\bm{u}$ we apply.
+
+\end{flushleft}
+
+\bigskip
+
+\begin{center}
+    About derivation of Least squares
+\end{center}
+\begin{flushleft}
+
+The notation:
+\begin{itemize}
+    \item $\widetilde {\theta }$ - estimated $\theta$;
+    \item $ \epsilon_{\theta} = \theta - \widetilde{\theta}$ - parameter estimation error;
+    \item $e_{\theta} = y - M \widetilde{\theta}$.
+\end{itemize}
+ all $\widetilde{ }$ denote that the variable is estimated.
+\bigskip
+We want to minimize the variable that we can directly measure. Our global goal is to minimize the parameter estimation error, but we do not measure it directly. Thus to achieve it we will minimize $e_{\theta}$, which we measure directly.
+\bigskip
+
+We introduce the cost function:
+\[
+J = \frac{1}{2}e_{\theta}^\top e_{\theta}
+\]
+The right part of the equation is the norm of $e_{\theta}$. Since $e_{\theta}$ is positive, when we minimize the norm of $e_{\theta}$ we minimize $e_{\theta}$ itself.
+
+\end{flushleft}
+
+
+\end{document}
+
+
