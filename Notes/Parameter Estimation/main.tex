@@ -34,7 +34,7 @@
 According to the problem statement we have a system, whose model is defined in terms of parameter $\theta$.
 We need to find a stabilizing control law knowing the relations: $\bm{f(x, u) = f(x, u, \theta)}$.
 \bigskip
-The problem is that to find the control law we need to know the higher order derivatives. We cannot get from the current step, but we can use the "historical" higher order derivatives from the previous step. The other part of the lecture is about how can we use Least squares to estimate the parameters.
+We cannot get from the current step, but we can use the "historical" higher order derivatives from the previous step. The other part of the lecture is about how can we use Least squares to estimate the parameters.
 \bigskip
 We need to perform several experiments to estimate the parameters (the more experiments the better approximation). However, since we need to use historical data to approximate the higher order derivatives, we do not know which control to apply while we performing these experiments. This question is the subject of the next lecture.
 \end{flushleft}
@@ -53,7 +53,7 @@ Then we introduced the notation $\bm{y = u}$ and get:
 \bm{y = m \ddot{q} + \mu \dot{q} + kq}
 \]
 
-The thing is: we do not know actual values of $\bm{ \ddot{q},\dot{q},q}$ but we always can measure $\bm{y}$ by measuring $\bm{u}$ we apply.
+We always can measure $\bm{y}$ by measuring $\bm{u}$ we apply.
 
 \end{flushleft}
 
