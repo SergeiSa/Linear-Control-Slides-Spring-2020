@@ -87,6 +87,6 @@ https://cds.cern.ch/record/1100534/files/p73.pdf
   * Control theory by S. Simrock - section 9:
 https://cds.cern.ch/record/1100534/files/p73.pdf
 
-
-
+## Lecture 12. Adaptive Control
+#todo
 
