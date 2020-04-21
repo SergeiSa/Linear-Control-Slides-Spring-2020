@@ -55,7 +55,15 @@ jobs:
           root_file: main.tex
           working_directory: lecture_slides/Adaptive_Control/
 
+      - name: Compile LaTeX document for Control_with_constraints
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: main.tex
+          working_directory: lecture_slides/Control_with_constraints/
 
+
+          
+          
 
       - name: Save Discrete_Systems artifact
         uses: actions/upload-artifact@v1
@@ -93,6 +101,11 @@ jobs:
           name: Adaptive_Control.pdf
           path: lecture_slides/Adaptive_Control/main.pdf
 
+      - name: Save Control_with_constraints artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Control_with_constraints.pdf
+          path: lecture_slides/Control_with_constraints/main.pdf
 
 
 
@@ -107,5 +120,6 @@ jobs:
           git add lecture_slides/Observer_Design_Kalman_Filter/main.pdf
           git add lecture_slides/Parameter_Estimation/main.pdf
           git add lecture_slides/Adaptive_Control/main.pdf
+          git add lecture_slides/Control_with_constraints/main.pdf
           git commit -m "Update compiled PDFs"
           git push

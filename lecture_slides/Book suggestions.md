@@ -88,5 +88,8 @@ https://cds.cern.ch/record/1100534/files/p73.pdf
 https://cds.cern.ch/record/1100534/files/p73.pdf
 
 
+## Lecture 12. Adaptive Control
 
+
+## Lecture 13. Control with constraints
 
