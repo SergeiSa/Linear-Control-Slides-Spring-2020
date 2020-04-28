@@ -61,7 +61,14 @@ jobs:
           root_file: main.tex
           working_directory: lecture_slides/Control_with_constraints/
 
+      - name: Compile LaTeX document for Linear_Algebra_for_LTI_systems
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: main.tex
+          working_directory: lecture_slides/Linear_Algebra_for_LTI_systems/
 
+          
+          
           
           
 
@@ -107,8 +114,15 @@ jobs:
           name: Control_with_constraints.pdf
           path: lecture_slides/Control_with_constraints/main.pdf
 
+      - name: Save Linear_Algebra_for_LTI_systems artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Linear_Algebra_for_LTI_systems.pdf
+          path: lecture_slides/Linear_Algebra_for_LTI_systems/main.pdf
 
-
+          
+          
+          
       - name: Update compiled PDFs in git repository
         if: github.event.pull_request.merged == true || (github.event_name == 'push' && github.ref == 'refs/heads/master')
         run: |
@@ -121,5 +135,6 @@ jobs:
           git add lecture_slides/Parameter_Estimation/main.pdf
           git add lecture_slides/Adaptive_Control/main.pdf
           git add lecture_slides/Control_with_constraints/main.pdf
+          git add lecture_slides/Linear_Algebra_for_LTI_systems/main.pdf
           git commit -m "Update compiled PDFs"
           git push
