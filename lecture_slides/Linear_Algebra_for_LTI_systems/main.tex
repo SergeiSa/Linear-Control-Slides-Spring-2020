@@ -1,0 +1,321 @@
+\documentclass{beamer}
+
+ \pdfmapfile{+sansmathaccent.map}
+
+
+\mode<presentation>
+{
+  \usetheme{Madrid}      % or try Darmstadt, Madrid, Warsaw, ...
+%   \usecolortheme{beaver} % or try albatross, beaver, crane, ...
+  \usefonttheme{serif}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+
+\renewcommand{\familydefault}{\rmdefault}
+
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\usepackage{subcaption}
+
+
+\title{ Linear Algebra for LTI systems}
+\author{by Sergei Savin}
+\centering
+\date{Spring 2020}
+
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+
+\begin{itemize}
+\item Which states are possible?
+\item How to check if the state is possible?
+\item Check if affine system is stabilizable
+\item Criteria without orthonormal basis
+\item Checking if an arbitrary point can be stabilized
+\item All stabilizable points
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Which states are possible?}
+% \framesubtitle{Parameter estimation}
+\begin{flushleft}
+
+Consider discrete autonomous LTI system:
+%
+\begin{equation}
+\label{DLTI}
+    \mathbf x_{i+1} = \mathbf A \mathbf x_i
+\end{equation}
+%
+where $\mathbf x \in \mathbb{R}^n$ is the state of the system, expressed in the basis $\mathbf O$. What possible values can $\mathbf x_{i+1}$ attain?
+
+\bigskip
+
+From the \eqref{DLTI} follows that all possible $\mathbf x_{i+1}$ are in the \emph{column space} of $\mathbf A$.
+
+\[
+\mathbf x_{i+1} \in \mathcal{X} = \text{col} (\mathbf A) \subseteq \mathbb{R}^n
+\]
+
+% \bigskip
+
+% If $\mathcal{X} \neq \mathbb{R}^n$, then $\exists \mathcal{N}$, s.t. $\mathcal{X} \bigoplus \mathcal{N} = \mathbb{R}^n$, where $\mathcal{N}$ is called null space of $\mathbf A$: 
+% \[
+% \mathcal{N} = \text{null} (\mathbf A)
+% \]
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{How to check if the state is possible?}
+\framesubtitle{Part 1}
+\begin{flushleft}
+
+How can we tell if a particular value of $\mathbf x_{i+1}$ is possible? More general, having an the equation $\mathbf h = \mathbf A \mathbf x$, how do check that for a particular $\mathbf h$, $\exists \mathbf x$, s.t. the equality is satisfied?
+
+\bigskip
+
+Let $\mathbf P$ be an orthonormal basis in the column space of $\mathbf A$:
+\[
+\mathbf P = \text{orth} (\mathbf A)
+\]
+Columns of $\mathbf P$ span the column space of $\mathbf A$, or in other words, the column spaces of $\mathbf A$ and $\mathbf P$ and the same: $\mathcal{X} = \text{col} (\mathbf A) = \text{col} (\mathbf P)$.
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{How to check if the state is possible?}
+\framesubtitle{Part 2}
+\begin{flushleft}
+
+Vector $\mathbf h$ is expressed in the basis $\mathbf O$, which we can denote as $\mathbf h^{\mathbf O}$. Then, we can find coordinates of the projection of $\mathbf h$ onto $\mathcal{X}$ in the basis $\mathbf P$:
+
+\[
+\mathbf h_p^{\mathbf P} = \mathbf P^\top \mathbf h^{\mathbf O}
+\]
+
+In the basis $\mathbf O$, vector $\mathbf h_P$ is given by the equation $\mathbf h_p^{\mathbf O} = \mathbf P \mathbf h_p^{\mathbf P}$:
+
+\[
+\mathbf h_p^{\mathbf O} =\mathbf P  \mathbf P^\top \mathbf h^{\mathbf O}
+\]
+
+\bigskip
+
+Notice, that if vector $\mathbf h$ lies in the column space $\mathcal{X}$, its projection onto $\mathcal{X}$, namely $\mathbf h_p^{\mathbf O}$, should be equal to $\mathbf h$. Let us define projection residual $\mathbf e$:
+\[
+\mathbf e^{\mathbf O} = \mathbf h_p^{\mathbf O} - \mathbf h^{\mathbf O}
+\]
+
+Therefore we con formulate that $\mathbf h \in \mathcal{X}$ iff $\mathbf e = 0$.
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{How to check if the state is possible?}
+\framesubtitle{Part 3}
+\begin{flushleft}
+
+Now we can formulate the condition for $\mathbf h \in \mathcal{X} = \text{col} (\mathbf A)$:
+\[
+\mathbf P \mathbf P^\top \mathbf h - \mathbf h = 0
+\]
+or:
+\[
+(\mathbf P \mathbf P^\top - \mathbf I) \mathbf h = 0
+\]
+where $\mathbf P = \text{orth} (\mathbf A)$
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Check if affine system is stabilizable}
+\framesubtitle{Part 1}
+\begin{flushleft}
+
+Consider affine linear system:
+\begin{equation}
+\label{eq:Affine}
+    \dot{\mathbf x} = \mathbf A \mathbf x + \mathbf B \mathbf u + \mathbf c
+\end{equation}
+
+Can it be stabilized? Let the control law be give affine:
+\[
+\mathbf u = -\mathbf K \mathbf x - \mathbf u_0
+\]
+We want to find such $\mathbf K$ and $\mathbf u_0$ that:
+
+\begin{itemize}
+    \item dynamics of the system becomes $\dot{\mathbf x} =  (\mathbf A - \mathbf B \mathbf K) \mathbf x$.
+    \item $\mathbf A - \mathbf B \mathbf K < 0$.
+\end{itemize}
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Check if affine system is stabilizable}
+\framesubtitle{Part 2}
+\begin{flushleft}
+
+In order for the 
+$\begin{cases}
+    \dot{\mathbf x} = \mathbf A \mathbf x + \mathbf B \mathbf u + \mathbf c \\
+    \mathbf u = -\mathbf K \mathbf x - \mathbf u_0
+\end{cases}$
+to become
+$\dot{\mathbf x} =  (\mathbf A - \mathbf B \mathbf K) \mathbf x$,
+the following equality needs to hold:
+\[
+\mathbf B \mathbf u_0 = \mathbf c
+\]
+
+In other words, $\mathbf c$ needs to be in the column space of $\mathbf B$. And we know the conditions we need to check:
+
+\[
+(\mathbf P \mathbf P^\top - \mathbf I) \mathbf c = 0,
+\]
+where $\mathbf P = \text{orth} (\mathbf B)$
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Criteria without orthonormal basis}
+% \framesubtitle{Part 2}
+\begin{flushleft}
+
+Finding an orthonormal basis might be excessive for this task, and there is a more direct way of checking if for a given $\mathbf h$, $\exists \mathbf x$, s.t.  $\mathbf h = \mathbf A \mathbf x$.
+
+If there exists $\mathbf x^*$ such that $\mathbf h = \mathbf A \mathbf x^*$, then it can be found as:
+
+\[
+\mathbf x^* = \text{argmin} \ || \mathbf h - \mathbf A \mathbf x ||
+\]
+
+Solution to this \emph{linear least squares problem} is a psuedo inverse:
+\[
+\mathbf x^* = \mathbf A^+ \mathbf h
+\]
+
+Therefore, projection residual equation can be written as:
+\[
+\mathbf e = \mathbf A \mathbf x^* - \mathbf h
+\]
+
+Same as before, original question then comes down to proving that $\mathbf e = 0$:
+\[
+\mathbf A \mathbf A^+ \mathbf h - \mathbf h = 0
+\]
+or
+\[
+(\mathbf A \mathbf A^+ - \mathbf I) \mathbf h  = 0
+\]
+
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Checking if an arbitrary point can be stabilized}
+% \framesubtitle{Part 2}
+\begin{flushleft}
+
+Consider a linear system:
+\begin{equation}
+\begin{cases}
+    \dot{\mathbf x} = \mathbf A \mathbf x + \mathbf B \mathbf u \\
+    \mathbf u = -\mathbf K (\mathbf x - \mathbf x_0) - \mathbf u_0
+\end{cases}
+\end{equation}
+
+Is point $\mathbf x_0$ stabilizable? What this question means, is can we find such $\mathbf K$ and $\mathbf u_0$ that the system converges to $\mathbf x_0$?
+
+\bigskip
+
+Assume we are at the point $\mathbf x_0$. Then $\mathbf K (\mathbf x - \mathbf x_0) = 0$. Can we make sure we stay at this point? If not, it is not stabilized.
+
+This comes down to solving equation:
+
+\[
+\mathbf A \mathbf x_0 - \mathbf B \mathbf u_0 = 0
+\]
+
+In other words, we need to find if $\mathbf A \mathbf x_0$ is in the column space of $\mathbf B$. Here is the criterion:
+\[
+(\mathbf B \mathbf B^+ - \mathbf I) (\mathbf A \mathbf x_0)  = 0
+\]
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{All stabilizable points}
+% \framesubtitle{Part 2}
+\begin{flushleft}
+
+For the system from the previous example we can easily find all points that are stabilizable. For that we consider equation:
+\[
+\mathbf A \mathbf x_0 - \mathbf B \mathbf u_0 = 0
+\]
+but this time we make both $\mathbf x_0$ and $\mathbf u_0$ our variables. This system has a nontrivial solution if matrix $[\mathbf A, \ -\mathbf B]$ has a nontrivial \emph{null space}.
+
+\bigskip
+
+Let $\mathbf z = \begin{bmatrix} \mathbf x_0 \\ \mathbf u_0 \end{bmatrix}$. And let $\mathbf N$ be a basis in the null space of $[\mathbf A, \ -\mathbf B]$:
+
+\[
+\mathbf N = \text{null}([\mathbf A, \ -\mathbf B])
+\]
+
+Then any combination of its columns produces a vector $\mathbf z$, which is stabilizable:
+\[
+\begin{bmatrix} \mathbf x_0 \\ \mathbf u_0 \end{bmatrix} = \mathbf z = 
+\mathbf N \mathbf r
+\]
+where $\mathbf r$ is a random vector.
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}
+\centerline{Lecture slides are available via Moodle.}
+\bigskip
+\centerline{You can help improve these slides at:}
+\centerline{\url{https://github.com/SergeiSa/Linear-Control-Slides-Spring-2020}}
+\bigskip
+\centerline{Check Moodle for additional links, videos, textbook suggestions.}
+\end{frame}
+
+\end{document}
