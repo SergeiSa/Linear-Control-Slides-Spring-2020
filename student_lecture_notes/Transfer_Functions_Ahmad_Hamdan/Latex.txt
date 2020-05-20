@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Transfer Function}
+\author{Ahmad Hamdan }
+\date{May 2020}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+The transfer function is a convenient representation of a linear time invariant dynamical system. Mathematically the transfer function is a function of complex variables. For finite dimensional systems the transfer function is simply a rational function of a complex variable. The transfer function can be obtained by inspection or by simple algebraic manipulations of the differential equations that describe the systems. Transfer functions can describe systems of very high order, even infinite dimensional systems governed by partial differential equations. The transfer function of a system can be determined from experiments on a system.
+\section{Transfer Functions}
+he transfer function of a linear, time-invariant system is the ratio of the Laplace transform of the output $Y(s)$ to the Laplace transform of the corresponding input $U(s)$ with all initial conditions assumed to be zero.
+\ 
+\section{From Differential Equations to Transfer Functions}
+Let the equation 
+\begin{equation}
+    \frac{d^2 y(t)}{dt^2} + a_1 \frac{dy(t)}{dt} + a_0 y(t) = b_0 u(t)
+\end{equation}
+with some initial conditions 
+\begin{equation} 
+\left.y(t)\right|_{t=0}=y(0)\ \ \textrm{and}\ \  
+\left.\frac{dy(t)}{dt}\right|_{t=0}=\frac{dy(0)}{dt}=\dot y(0)
+\end{equation} 
+Taking Laplace transform of both sides we obtain
+\begin{equation}
+   [s^2 y(s) - sy(0) - y(0)] + a_1 [sY(s) - y(0)] + a_0 Y(s) = b_0 U(s)
+\end{equation}
+Where $Y(s) = \mathscr{L}\{y(t)\}$ and $U(s) = \mathscr{L}\{u(t)\}$. Combining terms and solving with respect to $Y(s)$ we obtain:
+\begin{equation}
+    Y(s) = \frac{b_0}{s^2 + a_1 s + a_0} U(s) + \frac{(s+a_1)y(0)+y(0)}{s^2+a_1 s+a_0}
+\end{equation}
+Assuming the initial conditions are zero 
+\begin{equation}
+    \frac{Y(s)}{U(s)} = G(s) = \frac{b_0}{s^2 + a_1 s + a_0}
+\end{equation}
+where $G(s)$ is the transfer function of the system defined above.
+\\
+\\
+Consider the transfer function
+\begin{equation}
+    G(s) = \frac{b_ms^m+b_{m-1}s^{m-1}+\ \ \  +b_1s+b_0}{s^n+a_{n-1}s^{n-1}+\ \ \ +a_1s+a_0}\ \ \textrm{with}\ \  m\leqslant n
+\end{equation}
+Note that the system described by this $G(s)$ is described in the time domain by the following differential equation:
+\begin{equation}
+  y^{(n)}(t)+a_{n-1}y^{(n-1)}(t)+...+a_{1}y^{(1)}(t)+a_{0}y(t)=b_{m}u^{(m)}(t)+...+b_{1}u^{(1)}(t)+b_{0}u(t)
+\end{equation}
+where $y^n(t)$ denotes the nth derivative of $y(t)$ with respect to time t.\\
+Taking Laplace transform of both sides of this differential equation, assuming that all initial conditions are zero, one obtains the above transfer function $G(s)$.
+
+\section{From State Space Descriptions to Transfer Functions}
+Consider:
+\begin{equation}
+  \dot x(t)=Ax(t)+Bu(t),\ 
+  y(t)=Cx(t)+Du(t)
+\end{equation}
+with $x(0)$ initial conditions; $x(t)$ is in general an n-tuple, that is a (column) vector with n elements. Taking Laplace transform of both sides of the state equation:
+\begin{equation}
+  sX(s)-X(0)=AX(s)+BU(s)\ \ \textrm{or}\ \  (sI_n-A)X(s)=BU(s)+x(0)
+\end{equation}
+then:
+\begin{equation}
+  X(s)=(sI_n-A)^{-1}BU(s)+(sI_n-A)^{-1}x(0)
+\end{equation}
+Taking now Laplace transform on both sides of the output equation we obtain $Y(s)= CX(s)+DU(s)$
+Substituting we obtain,
+\begin{equation}
+  Y(s)=[C(sI_n-A)^{-1}B+D]U(s)+C(sI_n-A)^{-1}x(0)
+\end{equation}
+The response $y(t)$ is the inverse Laplace of $Y(s)$. Note that the second term on the right-hand side of the expression depends on $x(0)$ and it is zero when the initial conditions are zero, i.e., when $x(0)=0$. The first term describes the dependence of $Y$ on $U$ and it is not difficult to see that the transfer function $G(s)$ of the systems is:
+\begin{equation}
+  G(s)=C(sI_n-A)^{-1}B+D
+\end{equation}
+\textit{References:} \\
+https://www.cds.caltech.edu/~murray/courses/cds101/fa04/caltech/am04_ch6-3nov04.pdf \\
+The Electronics Engineers' Handbook, 5th Edition McGraw-Hill, Section 19, pp. 19.1-19.30, 2005.
+
+\end{document}
