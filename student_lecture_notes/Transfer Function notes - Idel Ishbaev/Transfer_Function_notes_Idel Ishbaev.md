@@ -1,4 +1,4 @@
-\f0\fs24 \cf0 # Transfer functions (notes)\
+# Transfer functions (notes)\
 #### by Idel Ishbaev, group 1\
 ## Introduction:\
 Transfer function: Laplace Transform of the impulse response of an LTI system when initial conditions = 0\
