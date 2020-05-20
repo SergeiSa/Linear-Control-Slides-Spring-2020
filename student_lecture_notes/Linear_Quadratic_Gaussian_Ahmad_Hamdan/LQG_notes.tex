@@ -1,0 +1,95 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath}	
+\usepackage{graphicx}			
+\begin{document}
+\title{Linear Quadratic Gaussian (LQG) Control Lecture Notes} 
+\author {Ahmad Hamdan}
+\maketitle
+\newpage
+\section*{Introduction}
+Liner quadratic Gaussian control problem is one of the basic optimal control problem in control theory engineering. This problem cover liner systems derived by additive white Gaussian noise phenomena. The challenge is to evaluate the performance of output feedback law of the controller in term of quadratic cost function with some Gaussian noise involvement in output measurements which is Gaussian random vector.
+\section*{Fundamentals}
+Following are the three essential points :\\
+
+•	Concerned with Liner system\\
+
+•	Minimization of quadratic cost function as main criterion\\
+
+•	External perturbations are Gaussian noise
+\section*{Solution to control problem}
+Under defined assumptions, optimal control solution can be determined in form of control law which is LQG controller. That is simply a hybrid combination of state estimator and state feedback. The state estimator is known as kalman filter or liner quadratic state estimator and state feedback is known as linear quadratic regulator.\cite{aastrom2012introduction}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=2.99 in]{l.PNG}
+  \caption{Schematic block diagram}\label{1}
+\end{figure}
+
+As shown in Figure \ref{1}, the state space model control of  plant by feedback gain 'K' and observer gain 'L'.\cite{eide2011lqg}
+\section*{Design principle}
+As this LQG control law determined by arrangement of two techniques so state estimator and state feedback can be designed independently stated by separation principle of design. LQG control is easily applied on linear time varying system and linear time invariant system and account for linear dynamic feedback control law.\cite{lindquist1973feedback}
+\section*{Limitations}
+Dimension of system state is the main parameter which can describe the limitations of LQG control law. If dimension of system state is large then problems may be occur during the implementation of classical LQG controller. \cite{georgiou2013separation} \cite{van2000numerical}
+\section*{Rectification}
+The limitations regarding large dimension state can be rectified as reduced order LQG problem known as fixed order LQG problem. In which number of states of LQG controller is fixed prior. Although solution is not unique however numerical algorithms are available to find optimal projection equations which establish locally optimized reduced order LQG controller.\cite{georgiou2013separation} \cite{van2000numerical}
+\section*{Robustness of LQG controller}
+Optima of the LQG doesn't necessarily guarantee robust stability. After design of the LQG controller, the rigorous stability including its closed system will be evaluated individually for performance analysis. Stochastic analysis is must instead of deterministic behavior of system parameters for robust stability. Therefore, optimal gains can be derived by computing the expected value of cost function. The perturbed nonlinear system can also be control by LQG. \cite{van1999optimal}
+\section*{Mathematical representation of problem}
+we have an arbitrary linear dynamic system with continuous time\\
+\begin{equation}
+\frac{d}{dt}
+x(t) = A(t)x(t) + B(t)u(t) + v(t)
+\end{equation}
+\begin{equation}
+y(t) = C(t)x(t) + w(t)
+\end{equation}
+where x(t) is system state variables vector, u(t) is control input vector, v(t) is the additive white Gaussian system noise, y(t) represents output vector and w(t) is the measurement white additive Gaussian noise. The aim is to find the history of control input vector u(t) which depends on past measurements at each time step 't'.\cite{bernstein1986optimal}
+
+\begin{equation}
+J = E[x^T (T) Fx (T)+\int_{0}^{T}{x^T(t)}Q(t)x(t) + u^T(t)R(t)u(t) dt]
+\end{equation}
+\begin{align*}
+F\geq0, Q(t)\geq0, R(t)>0
+\end{align*}
+The cost function 'J' is minimized when\
+\begin{align*}
+y(t\textquotesingle), 0\leq t\textquotesingle<t
+\end{align*}
+where J represents cost function, T is final time horizon which is either finite or infinite and E represent the expected value. so the first term of cost function becomes ignore-able if final time  goes to infinity in first term $x^T (T) Fx (T)$.The cost function need to be finite by keeping the J/T.\cite{bernstein1986optimal}
+\section*{Mathematical representation of LQG controller}
+The LQG control problem is solved by LQG controller which is specified through following equations in-term of kalman gain L(t) and feedback gain K(t).
+\begin{equation}
+\frac{d}{dt}
+\hat{x(t)} = A(t)\hat{x(t)} + B(t)u(t) + L(t)(y(t)-C(t) \hat{x(t)})
+\end{equation}
+\begin{equation}
+u(t) = -K(t)\hat{x(t)}
+\end{equation}
+\begin{equation}
+\hat{x(0)} = E[x(0)]
+\end{equation}
+where L(t) represents the kalman gain which is associated with kalman filter. That filter generates estimated value of state x(t) through previous inputs. then it computes the kalman gin by the help of matrices A(t), C(t) with two white Gaussian noise matrices v(t), w(t) and $E[x(0)x^T(0)]$  \cite{bernstein1986optimal} \cite{sharp2011vehicle} .\\
+\section{Kalman gain:}
+The above defined five matrices compute the kalman gain by following riccati differential equation \cite{van1999optimal} \cite{bernstein1986optimal}
+\begin{equation}
+\frac{d}{dt}
+P(t) = A(t)P(t) + P(t)A^T(t) - P(t)C^T(t)w^-1 (t)C(t)P(t)+v(t)
+\end{equation}
+so by getting the solution P(t), then kalman gain L(t)
+\begin{equation}
+L(t) = P(t)C^T(t)w^-1 (t)
+\end{equation}
+\section{Feedback gain:}
+the feedback gain matrix is determined by following equations \cite{van1999optimal} \cite{bernstein1986optimal} \\
+\begin{equation}
+-\frac{d}{dt}
+S(t) = A^T(t)S(t) + S(t)A(t) - S(t)B(t)R^-1 (t)B^T(t)S(t)+Q(t)
+\end{equation}
+\begin{equation}
+K(t) = R^-1(t)B^T(t)S(t)
+\end{equation}
+\section*{Conclusion}
+LQG control problem divided into two section in which we have first  riccati equation describes the linear quadratic estimation problem solver in-term of kalman gain equation which resolve the estimation problem and second riccati equation defines the linear quadratic problem by linear quadratic regulator feedback gain equation. Hence LQG problem called separable.
+\bibliographystyle{ieeetran}
+\bibliography{ref_lqg}
+\end{document}
