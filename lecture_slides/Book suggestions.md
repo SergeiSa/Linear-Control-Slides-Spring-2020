@@ -75,8 +75,7 @@ https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-241j-d
 
 
 ## Lecture 9. Noise, Information, Observation
-#todo
-
+  * For statistical prerequisites, see Mathematics for Machine Learning: PCA, Week 1: https://www.coursera.org/learn/pca-machine-learning.
 
 ## Lecture 10. Observer Design, Kalman Filter
   * Control theory by S. Simrock - section 8.1:
