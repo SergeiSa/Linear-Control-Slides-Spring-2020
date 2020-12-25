@@ -14,6 +14,7 @@ https://cds.cern.ch/record/1100534/files/p73.pdf
 
 ## Lecture 2. Simple examples, Stability
 
+* State Space Stability (Linear Systems Theory EECS 221a, Berkeley) - https://youtu.be/7GarcEQ0uk8
 * Control Systems Engineering Norman S. Nise (chapters 3.3, 3.4)
 * Paul's Online Notes (systems of linear ODE, solutions for them):
 http://tutorial.math.lamar.edu/Classes/DE/SystemsDE.aspx
